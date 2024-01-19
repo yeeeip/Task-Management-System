@@ -26,6 +26,16 @@ public class Task {
     public Task() {
     }
 
+    public Task(Long id, String title, String description, TaskStatus status, TaskPriority priority, Long authorId, Long assigneeId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.authorId = authorId;
+        this.assigneeId = assigneeId;
+    }
+
     public Task(String title, String description, TaskPriority priority, Long authorId, Long assigneeId) {
         this.title = title;
         this.description = description;
