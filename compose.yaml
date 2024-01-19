@@ -1,4 +1,15 @@
 services:
+  app:
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/task_db
+    ports:
+      - 8080:8080
+    networks:
+      - my-net
   postgres:
     image: 'postgres:latest'
     environment:
@@ -7,3 +18,8 @@ services:
       - POSTGRES_USER=root
     ports:
       - 5432:5432
+    networks:
+      - my-net
+networks:
+  my-net:
+    driver: bridge
