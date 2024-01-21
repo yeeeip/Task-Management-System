@@ -1,5 +1,6 @@
 package com.nuzhd.taskmanagementsystem.service;
 
+import com.nuzhd.taskmanagementsystem.dto.TaskUpdateRequest;
 import com.nuzhd.taskmanagementsystem.exception.TaskNotFoundException;
 import com.nuzhd.taskmanagementsystem.exception.UserNotFoundException;
 import com.nuzhd.taskmanagementsystem.model.Task;
@@ -9,6 +10,7 @@ import com.nuzhd.taskmanagementsystem.repo.TaskRepository;
 import com.nuzhd.taskmanagementsystem.service.impl.TaskServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -112,5 +114,41 @@ public class TaskServiceTests {
                 TaskNotFoundException.class,
                 () -> taskService.findById(2L)
         );
+    }
+
+    @Test
+    public void TaskService_UpdateById_ReturnsUpdatedTask() {
+
+        TaskUpdateRequest updateRequest = new TaskUpdateRequest(
+                "New title",
+                "New Description",
+                "HIGH"
+        );
+
+        Task taskToUpdate = new Task(
+                1L,
+                "Test title",
+                "Test description",
+                TaskStatus.NEW,
+                TaskPriority.LOW,
+                2L,
+                6L
+        );
+
+        when(authService.fetchUserIdFromAuthentication())
+                .thenReturn(taskToUpdate.getAuthorId());
+
+        when(taskRepository.findById(taskToUpdate.getId()))
+                .thenReturn(Optional.of(taskToUpdate));
+
+        when(taskRepository.save(Mockito.any(Task.class)))
+                .thenAnswer(AdditionalAnswers.returnsFirstArg());
+
+        Task updatedTask = taskService.updateById(taskToUpdate.getId(), updateRequest);
+
+        assertThat(updatedTask).isNotNull();
+        assertThat(updatedTask).isEqualTo(taskToUpdate);
+//        assertThat(updatedTask.getId()).isEqualTo(taskToUpdate.getId());
+//        assertThat(updatedTask.getTitle()).isEqualTo(updateRequest.title());
     }
 }
