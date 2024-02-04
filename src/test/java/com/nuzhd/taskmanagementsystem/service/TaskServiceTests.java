@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -148,7 +149,5 @@ public class TaskServiceTests {
 
         assertThat(updatedTask).isNotNull();
         assertThat(updatedTask).isEqualTo(taskToUpdate);
-//        assertThat(updatedTask.getId()).isEqualTo(taskToUpdate.getId());
-//        assertThat(updatedTask.getTitle()).isEqualTo(updateRequest.title());
     }
 }
